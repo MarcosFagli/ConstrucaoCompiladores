@@ -6,7 +6,6 @@ grammar Lua;
 }
 
 
-
 programa : trecho;
 
 
@@ -17,6 +16,7 @@ bloco : trecho;
 
 
 //exp1 insere o nome de funcoes que fazem parte do pacote nativo na tabela, e portanto, nao possuem declaracoes no codigo analisado
+//expprefixo foi incluido no lugar de chamadafuncao para remover uma recursividade encadeada
 comando : listavar '=' listaexp 
         | exp1=expprefixo {TabelaDeSimbolos.adicionarSimbolo($exp1.text,Tipo.FUNCAO);} args 
         | expprefixo ':' Nome args

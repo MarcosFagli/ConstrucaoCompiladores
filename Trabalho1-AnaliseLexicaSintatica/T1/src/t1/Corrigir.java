@@ -17,7 +17,7 @@ public class Corrigir {
 
     // Especifique o caminho dos casos de teste.
     // Deve haver dois subdiretorios: entrada e saida
-    private final static String CAMINHO_CASOS_TESTE = "/home/marcos/Documents/UFSCar/09-2019/Compiladores/T1/casosDeTesteT1/casosDeTesteSintatico";
+    private final static String CAMINHO_CASOS_TESTE = "/home/marcos/Documents/UFSCar/09-2019/Compiladores/T1/ConstrucaoCompiladores/Trabalho1-AnaliseLexicaSintatica/casosDeTesteT1/casosDeTesteSintatico";
 
     // As flags GERA e VERIFICA são de uso do professor
     // GERA = true significa que a saída vai ser gerada, sobrescrevendo qualquer
@@ -107,8 +107,9 @@ public class Corrigir {
             }
         }
         if (!GERA) {
-            double nota = ((double) (totalCasosTeste - casosTesteErrados) / totalCasosTeste) * 10.0d;
+            double nota = ((double) (totalCasosTeste - casosTesteErrados) / totalCasosTeste) * 10.0d;            
             System.err.println("Nota = " + nota + " (" + LuaParser.grupo + ")");
+            System.out.println("Caso de testes errados: " + casosTesteErrados);
         } else {
             System.err.println("Gabarito gerado: " + LuaParser.grupo);
         }

@@ -1,4 +1,3 @@
 Fim da analise. Sem erros sintaticos.
 Tabela de simbolos:
 lexema=oldprint, tipo=VARIAVEL
-lexema=print, tipo=VARIAVEL

@@ -72,6 +72,10 @@ cuidadosamente e decida onde inserir as ações semânticas para produzir o resu
 Não é necessário tratar duplicatas, detalhes de instanciação, etc, pois as classes fornecidas já
 fazem esse trabalho. Você só precisará mexer no arquivo Lua.g4.
 
+### Entrega
+
+O trabalho será entregue, bem como, só foi realizado alterações no arquivo Lua.g4. Todos os outros códigos foram de autoria do professor, ou geração automática através do antlr.
+
 ### Mais informações
 
 Para mais informações sobre o trabalho, consultar a descrição do projeto na pasta:
