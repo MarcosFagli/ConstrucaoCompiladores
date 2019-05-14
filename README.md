@@ -1,7 +1,7 @@
 # ConstrucaoCompiladores
 Trabalho apresentado a disciplina construção de compiladores na Universidade Federal de São Carlos sobre orientação do Professor Doutor Daniel Lucredio.
 
-## Trabalho 1 - Análise Léxica e Sintática
+## Trabalho 1 - Análise Lexica e Sintática
 
 ### Descrição
 ### Tarefa 1 - Analisar léxico
