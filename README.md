@@ -76,6 +76,8 @@ fazem esse trabalho. Você só precisará mexer no arquivo Lua.g4.
 
 O trabalho será entregue, bem como, só foi realizado alterações no arquivo Lua.g4. Todos os outros códigos foram de autoria do professor, ou geração automática através do antlr.
 
+Ainda, o arquivo .zip com nome 628093_e_628301_e_595160, é o arquivo encaminhado para o professor. Este contém o arquivo lua.g4, com todas as alterações realizadas.
+
 ### Mais informações
 
 Para mais informações sobre o trabalho, consultar a descrição do projeto na pasta:

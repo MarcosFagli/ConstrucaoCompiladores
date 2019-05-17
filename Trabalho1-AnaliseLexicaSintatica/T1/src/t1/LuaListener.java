@@ -18,16 +18,6 @@ public interface LuaListener extends ParseTreeListener {
 	 */
 	void exitPrograma(LuaParser.ProgramaContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LuaParser#trecho}.
-	 * @param ctx the parse tree
-	 */
-	void enterTrecho(LuaParser.TrechoContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LuaParser#trecho}.
-	 * @param ctx the parse tree
-	 */
-	void exitTrecho(LuaParser.TrechoContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link LuaParser#bloco}.
 	 * @param ctx the parse tree
 	 */
@@ -38,6 +28,16 @@ public interface LuaListener extends ParseTreeListener {
 	 */
 	void exitBloco(LuaParser.BlocoContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link LuaParser#trecho}.
+	 * @param ctx the parse tree
+	 */
+	void enterTrecho(LuaParser.TrechoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LuaParser#trecho}.
+	 * @param ctx the parse tree
+	 */
+	void exitTrecho(LuaParser.TrechoContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link LuaParser#comando}.
 	 * @param ctx the parse tree
 	 */
@@ -47,16 +47,6 @@ public interface LuaListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitComando(LuaParser.ComandoContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LuaParser#cf2}.
-	 * @param ctx the parse tree
-	 */
-	void enterCf2(LuaParser.Cf2Context ctx);
-	/**
-	 * Exit a parse tree produced by {@link LuaParser#cf2}.
-	 * @param ctx the parse tree
-	 */
-	void exitCf2(LuaParser.Cf2Context ctx);
 	/**
 	 * Enter a parse tree produced by {@link LuaParser#ultimocomando}.
 	 * @param ctx the parse tree
