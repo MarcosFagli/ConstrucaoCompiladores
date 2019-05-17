@@ -1,6 +1,9 @@
 grammar Lua;
 
-//Membros do grupo: Bruna Zamith(Turma A-Ter), Marcos Faglioni(Turma A-Ter) e Pedro Vinicius(Turma B-Seg)
+//Membros do grupo: 
+//Bruna Zamith        628093 (Turma A-Ter);
+//Marcos Faglioni     628301 (Turma A-Ter);
+//Pedro Vinicius      595160 (Turma B-Seg).
 @members {
    public static String grupo="<628093,628301,595160>";
 }
@@ -16,32 +19,20 @@ bloco : trecho;
 
 
 //exp1 insere o nome de funcoes que fazem parte do pacote nativo na tabela, e portanto, nao possuem declaracoes no codigo analisado
-//expprefixo foi incluido no lugar de chamadafuncao para remover uma recursividade encadeada
+//expprefixo foi incluido no lugar de chamadafuncao para remover uma recursividade encadeada, assim chamadadefuncoes foi removido para facilitar a remocao de recursividade em exprefixo
 comando : listavar '=' listaexp 
-        | exp1=expprefixo {TabelaDeSimbolos.adicionarSimbolo($exp1.text,Tipo.FUNCAO);} args 
+        | (exp1=expprefixo args) { TabelaDeSimbolos.adicionarSimbolo($exp1.text, Tipo.FUNCAO); } | (expprefixo ':' Nome a2=args)
         | expprefixo ':' Nome args
         | 'do' bloco 'end' 
         | 'while' exp 'do' bloco 'end' 
         | 'repeat' bloco 'until' exp 
         | 'if' exp 'then' bloco ('elseif' exp 'then' bloco)* ('else' bloco)? 'end' 
-        | 'for' Nome '=' exp ',' exp (',' exp)? 'do' bloco 'end'
+        | 'for' nome1=Nome { TabelaDeSimbolos.adicionarSimbolo($nome1.text, Tipo.VARIAVEL); } '=' exp ',' exp (',' exp)? 'do' bloco 'end'
         | 'for' listadenomes 'in' listaexp 'do' bloco 'end'
         | 'function' nomedafuncao corpodafuncao 
         | 'local' 'function' Nome corpodafuncao 
-        | 'local' listadenomes ('=' listaexp)?
+        | 'local' listadenomes ('=' list=listaexp { TabelaDeSimbolos.adicionarSimbolo($list.text, Tipo.VARIAVEL); })?
         ;
-
-chamadadefuncao : var args cf2 
-                | '(' exp ')' args cf2 
-                | var ':' Nome args cf2 
-                | '(' exp ')' ':' Nome args cf2 
-                | cf2
-                ;
-
-
-cf2 : args cf2 
-    | ':' Nome args cf2
-    ;
 
 
 ultimocomando : 'return' (listaexp)? 
@@ -68,7 +59,7 @@ listavar : var (',' var)*;
 listadenomes : nome1=Nome {TabelaDeSimbolos.adicionarSimbolo($nome1.text,Tipo.VARIAVEL);} (',' nome2=Nome {TabelaDeSimbolos.adicionarSimbolo($nome2.text,Tipo.VARIAVEL);})*;
 
 
-listaexp : (exp ',')* exp;
+listaexp : (exp  ',')* exp ;
 
 
 exp : 'nil' exp2 
@@ -92,8 +83,9 @@ Cadeia : ( '\'' (.*?) '\'')
 
 
 //nome1 insere o nome de funções que são instanciadas de outras bibliotecas na tabela
+//Remover a recursividade a esquerda de chamadadefuncao e var, substituindo em exprefixo e seguindo as regras vistas em sala de aula. A criação de exprefixo 2 faz parte do conjunto de adptacao juntamente com a insercao do vazio na regra criada.
 expprefixo : Nome expprefixo2
-           | Nome ('.' nome1=Nome {TabelaDeSimbolos.adicionarSimbolo($nome1.text,Tipo.FUNCAO);} expprefixo2)
+           | nome1=Nome ('.' nome2=Nome expprefixo2) {TabelaDeSimbolos.adicionarSimbolo($nome1.text + '.' + $nome2.text,Tipo.FUNCAO);}
            | '(' exp ')' expprefixo2
            ;
 
@@ -156,8 +148,8 @@ opunaria : '-'
          ;
 
 
+//Comentario que existe em lua, mas nao esta descrita em 8, no manual de sintaxe lua
 COMENTARIO : '--' (.*?) ('\n' | '\r') -> skip;
 
 
 WS : (' ' | '\n' | '\r' | '\t') -> skip;
-

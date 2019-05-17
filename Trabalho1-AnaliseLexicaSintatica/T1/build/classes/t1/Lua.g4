@@ -6,7 +6,7 @@ grammar Lua;
 }
 
 
-programa : trecho;
+programa : trecho {System.out.println("oi5");};
 
 
 trecho : (comando (';')?)* (ultimocomando (';')?)?;
@@ -18,7 +18,7 @@ bloco : trecho;
 //exp1 insere o nome de funcoes que fazem parte do pacote nativo na tabela, e portanto, nao possuem declaracoes no codigo analisado
 //expprefixo foi incluido no lugar de chamadafuncao para remover uma recursividade encadeada
 comando : listavar '=' listaexp 
-        | exp1=expprefixo {TabelaDeSimbolos.adicionarSimbolo($exp1.text,Tipo.FUNCAO);} args 
+        | exp1=expprefixo args 
         | expprefixo ':' Nome args
         | 'do' bloco 'end' 
         | 'while' exp 'do' bloco 'end' 
@@ -50,7 +50,7 @@ ultimocomando : 'return' (listaexp)?
 
 
 //nome insere na tabela o nome de funcoes que são declaradas no programa analisado
-nomedafuncao : nome=Nome {TabelaDeSimbolos.adicionarSimbolo($nome.text,Tipo.FUNCAO);} ('.' Nome)* (':' Nome)?;
+nomedafuncao : nome=Nome {TabelaDeSimbolos.adicionarSimbolo($nome.text,Tipo.FUNCAO);} {System.out.println("oi2");} ('.' Nome)* (':' Nome)?;
 
 
 Nome : ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
@@ -92,8 +92,8 @@ Cadeia : ( '\'' (.*?) '\'')
 
 
 //nome1 insere o nome de funções que são instanciadas de outras bibliotecas na tabela
-expprefixo : Nome expprefixo2
-           | Nome ('.' nome1=Nome {TabelaDeSimbolos.adicionarSimbolo($nome1.text,Tipo.FUNCAO);} expprefixo2)
+expprefixo : nome1=Nome expprefixo2 {System.out.println("oi3");} {TabelaDeSimbolos.adicionarSimbolo($nome1.text,Tipo.FUNCAO);}
+           | nome1=Nome ('.' nome2=Nome expprefixo2) {System.out.println("oi");} {TabelaDeSimbolos.adicionarSimbolo($nome1.text + '.' + $nome2.text,Tipo.FUNCAO);}
            | '(' exp ')' expprefixo2
            ;
 
@@ -160,4 +160,3 @@ COMENTARIO : '--' (.*?) ('\n' | '\r') -> skip;
 
 
 WS : (' ' | '\n' | '\r' | '\t') -> skip;
-

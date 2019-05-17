@@ -48,16 +48,6 @@ public interface LuaListener extends ParseTreeListener {
 	 */
 	void exitComando(LuaParser.ComandoContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LuaParser#chamadadefuncao}.
-	 * @param ctx the parse tree
-	 */
-	void enterChamadadefuncao(LuaParser.ChamadadefuncaoContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LuaParser#chamadadefuncao}.
-	 * @param ctx the parse tree
-	 */
-	void exitChamadadefuncao(LuaParser.ChamadadefuncaoContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link LuaParser#cf2}.
 	 * @param ctx the parse tree
 	 */

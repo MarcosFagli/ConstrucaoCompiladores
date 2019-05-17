@@ -6,4 +6,5 @@ lexema=cont, tipo=VARIAVEL
 lexema=x, tipo=VARIAVEL
 lexema=print, tipo=FUNCAO
 lexema=soma, tipo=VARIAVEL
-lexema=mod, tipo=FUNCAO
+lexema=i, tipo=VARIAVEL
+lexema=math.mod, tipo=FUNCAO

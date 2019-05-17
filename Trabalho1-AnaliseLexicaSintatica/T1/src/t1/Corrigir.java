@@ -109,7 +109,6 @@ public class Corrigir {
         if (!GERA) {
             double nota = ((double) (totalCasosTeste - casosTesteErrados) / totalCasosTeste) * 10.0d;            
             System.err.println("Nota = " + nota + " (" + LuaParser.grupo + ")");
-            System.out.println("Caso de testes errados: " + casosTesteErrados);
         } else {
             System.err.println("Gabarito gerado: " + LuaParser.grupo);
         }
