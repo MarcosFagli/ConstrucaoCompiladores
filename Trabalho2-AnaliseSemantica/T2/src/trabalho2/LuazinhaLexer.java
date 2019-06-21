@@ -100,6 +100,7 @@ public class LuazinhaLexer extends Lexer {
 	}
 
 
+	public static String grupo = "<628093,628301,595160>";
 	PilhaDeTabelas pilhaDeTabelas = new PilhaDeTabelas();
 
 

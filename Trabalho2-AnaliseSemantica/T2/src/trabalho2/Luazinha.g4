@@ -6,6 +6,7 @@ grammar Luazinha;
 //Pedro Vinicius      595160 (Turma B-Seg).
 
 @members{
+public static String grupo = "<628093,628301,595160>";
 PilhaDeTabelas pilhaDeTabelas = new PilhaDeTabelas();
 }
 
@@ -20,19 +21,43 @@ trecho : (comando ';'?)* (ultimocomando ';'?)?
 bloco : trecho
       ;
 
+// Alterações:
+//   listavar:
+//       Nessa regra tem que se percorrer todas as variáveis, checando sua existencia no escopo, e caso não exista, inserir na tabela de simbolos corrente;
+//   primerio for:
+//       Este primeiro for é fixo para somente uma variavel declarada no comando do for (podem haver outras no corpo do for), assim, cria-se um escopo do for, e em seguida, insere a variavel de controle do for, continua-se a regra, e ao final, desempilha a tabela de simbolos do for;
+//   segundo for:
+//       Neste for é possivel declarar uma serie de variaveis de controle, assim, devemos criar um novo escopo, em seguida temos que checar se as atribuições são possiveis, ou seja, se não é utilizada nenhuma variável não declarada no lado direito da atribuição, e então inserir na tabela de simbolos cada uma das variaveis de controle, após o término do dor, desempilhar a tabela do for;
+//   function:
+//       Cria-se um novo escopo, passando o nome da função, executa normalmente a regra, e no final, desempilha a tabela criada;
+//   'local' listaDeNomes:
+//       Para cada variavel local criada, tem que ser inserida na tabela.
 comando :  listavar '=' listaexp 
               {for(String nome : $listavar.nomes)
                 if(!pilhaDeTabelas.existeSimbolo(nome))
                   pilhaDeTabelas.topo().adicionarSimbolo(nome, "variavel");
-              }
-          #comandoAtribuicao
+              } #comandoAtribuicao
         |  chamadadefuncao #comandoChamadaDeFuncao
         |  'do' bloco 'end' #comandoDo
         |  'while' exp 'do' bloco 'end' #comandoWhile
         |  'repeat' bloco 'until' exp #comandoRepeat
         |  'if' exp 'then' bloco ('elseif' exp 'then' bloco)* ('else' bloco)? 'end' #comandoIf
-        |  'for' NOME '=' exp ',' exp (',' exp)? 'do' bloco 'end' #comandoFor1
-        |  'for' listadenomes 'in' listaexp 'do' bloco 'end' #comandoFor2
+        |  'for' 
+           {pilhaDeTabelas.empilhar(new TabelaDeSimbolos("for"));}
+           NOME
+           {pilhaDeTabelas.topo().adicionarSimbolo($NOME.getText(), "variavel");}
+           '=' exp ',' exp (',' exp)? 'do' bloco 
+           {pilhaDeTabelas.desempilhar();}
+           'end' #comandoFor1
+        |  'for' 
+            {pilhaDeTabelas.empilhar(new TabelaDeSimbolos("for"));}
+            listadenomes 'in' listaexp
+            {for(String nome : $listadenomes.nomes)
+              pilhaDeTabelas.topo().adicionarSimbolo(nome, "variavel");
+            }
+            'do' bloco 
+            {pilhaDeTabelas.desempilhar();}
+            'end' #comandoFor2
         |  'function' nomedafuncao
               {
                pilhaDeTabelas.empilhar(new TabelaDeSimbolos($nomedafuncao.nome));
@@ -42,7 +67,12 @@ comando :  listavar '=' listaexp
                }
                corpodafuncao {pilhaDeTabelas.desempilhar();} #comandoFunction
         |  'local' 'function' NOME corpodafuncao #comandoLocalFunction
-        |  'local' listadenomes ('=' listaexp)? #comandoLocalAtribuicao
+        |  'local' listadenomes 
+              {for(String nome : $listadenomes.nomes)
+                pilhaDeTabelas.topo().adicionarSimbolo(nome, "variavel");
+              }
+
+          ('=' listaexp)? #comandoLocalAtribuicao
         ;
 
 ultimocomando : 'return' (listaexp)? | 'break'
@@ -85,7 +115,14 @@ exp :  'nil' | 'false' | 'true' | NUMERO | CADEIA | '...' | funcao |
 expprefixo : NOME ( '[' exp ']' | '.' NOME )*
            ;
 
-expprefixo2 : var #expPrefixo2Var 
+
+// Alteração:
+//    No caso de uma atribuição, no lado direito, a variável tem que estar previamente declarada (pertencer a tabela), no caso de não pertecer, tem que ser chamado uma função de erro, que retornará como mensagem na saída
+expprefixo2 : var 
+            { if(!pilhaDeTabelas.existeSimbolo($var.nome))
+                Mensagens.erroVariavelNaoExiste($var.linha, $var.coluna, $var.nome);
+            }
+              #expPrefixo2Var 
             | chamadadefuncao #expPrefixo2ChamadaDeFuncao
             | '(' exp ')' #expPrefixo2Exp
             ;
@@ -103,9 +140,11 @@ funcao : 'function' corpodafuncao
 corpodafuncao : '(' (listapar)? ')' bloco 'end'
               ;
 
+
+// Alterações
+//   No caso de uma lista de parâmetros, devemos percorrer cada um dos parâmetros e inserir cada um deles na tabela
 listapar : listadenomes (',' '...')? 
             {for(String nome : $listadenomes.nomes)
-              if(!pilhaDeTabelas.existeSimbolo(nome))
               pilhaDeTabelas.topo().adicionarSimbolo(nome, "parametro");
             }
           #listaParListaDeNomes

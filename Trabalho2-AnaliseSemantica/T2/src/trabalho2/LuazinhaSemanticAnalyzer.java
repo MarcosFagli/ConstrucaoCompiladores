@@ -11,7 +11,7 @@ package trabalho2;
  */
 public class LuazinhaSemanticAnalyzer extends LuazinhaBaseVisitor<Void> {
     // Não esqueça de colocar os RAs do seu grupo na variável a seguir    
-    public static String grupo = "<628093,628301,595160>"; 
+    public static String grupo = "<628093,628301,595160>";
 
     PilhaDeTabelas pilhaDeTabelas = new PilhaDeTabelas();
 
