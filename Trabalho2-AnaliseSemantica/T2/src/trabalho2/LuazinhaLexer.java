@@ -100,6 +100,9 @@ public class LuazinhaLexer extends Lexer {
 	}
 
 
+	PilhaDeTabelas pilhaDeTabelas = new PilhaDeTabelas();
+
+
 	public LuazinhaLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);

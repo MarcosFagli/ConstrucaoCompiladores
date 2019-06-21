@@ -151,8 +151,7 @@ e também servirão de critério de avaliação.
 
 ### 2. Semântica da linguagem Lua
 
-Neste trabalho, você irá implementar um analisador semântico, que irá verificar algumas regras
-da linguagem Lua:
+Neste trabalho, você irá implementar um analisador semântico, que irá verificar algumas regras da linguagem Lua:
 
 ```
 - Aninhamento de escopos

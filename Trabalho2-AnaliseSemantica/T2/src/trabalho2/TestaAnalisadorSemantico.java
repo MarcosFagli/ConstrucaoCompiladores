@@ -38,8 +38,8 @@ public class TestaAnalisadorSemantico {
             LuazinhaParser.ProgramaContext arvore = parser.programa();
             // Comente as duas próximas linhas caso não queira fazer
             // a análise semântica por meio de um visitor
-            LuazinhaSemanticAnalyzer lsa = new LuazinhaSemanticAnalyzer();
-            lsa.visitPrograma(arvore);
+            //LuazinhaSemanticAnalyzer lsa = new LuazinhaSemanticAnalyzer();
+            //lsa.visitPrograma(arvore);
             InputStream casoDeTesteSaida = TestaAnalisadorSemantico.class.getResourceAsStream("casosDeTeste/saida/" + nomeArquivo);
             comparar(nomeArquivo, casoDeTesteSaida, Saida.getTexto());
         }
@@ -72,6 +72,5 @@ public class TestaAnalisadorSemantico {
         if (!diferente) {
             System.out.println("OK:" + nomeArquivo);
         }
-
     }
 }

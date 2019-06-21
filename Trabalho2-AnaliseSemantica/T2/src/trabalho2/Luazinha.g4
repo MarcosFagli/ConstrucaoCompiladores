@@ -1,6 +1,17 @@
 grammar Luazinha;
 
-programa : trecho
+//Membros do grupo: 
+//Bruna Zamith        628093 (Turma A-Ter);
+//Marcos Faglioni     628301 (Turma A-Ter);
+//Pedro Vinicius      595160 (Turma B-Seg).
+
+@members{
+PilhaDeTabelas pilhaDeTabelas = new PilhaDeTabelas();
+}
+
+programa : {pilhaDeTabelas.empilhar(new TabelaDeSimbolos("global")); }
+           trecho
+           {pilhaDeTabelas.desempilhar(); }
          ;
 
 trecho : (comando ';'?)* (ultimocomando ';'?)?
@@ -9,7 +20,12 @@ trecho : (comando ';'?)* (ultimocomando ';'?)?
 bloco : trecho
       ;
 
-comando :  listavar '=' listaexp #comandoAtribuicao
+comando :  listavar '=' listaexp 
+              {for(String nome : $listavar.nomes)
+                if(!pilhaDeTabelas.existeSimbolo(nome))
+                  pilhaDeTabelas.topo().adicionarSimbolo(nome, "variavel");
+              }
+          #comandoAtribuicao
         |  chamadadefuncao #comandoChamadaDeFuncao
         |  'do' bloco 'end' #comandoDo
         |  'while' exp 'do' bloco 'end' #comandoWhile
@@ -17,7 +33,14 @@ comando :  listavar '=' listaexp #comandoAtribuicao
         |  'if' exp 'then' bloco ('elseif' exp 'then' bloco)* ('else' bloco)? 'end' #comandoIf
         |  'for' NOME '=' exp ',' exp (',' exp)? 'do' bloco 'end' #comandoFor1
         |  'for' listadenomes 'in' listaexp 'do' bloco 'end' #comandoFor2
-        |  'function' nomedafuncao corpodafuncao #comandoFunction
+        |  'function' nomedafuncao
+              {
+               pilhaDeTabelas.empilhar(new TabelaDeSimbolos($nomedafuncao.nome));
+               if ($nomedafuncao.metodo) {
+                   pilhaDeTabelas.topo().adicionarSimbolo("self", "parametro");
+               }
+               }
+               corpodafuncao {pilhaDeTabelas.desempilhar();} #comandoFunction
         |  'local' 'function' NOME corpodafuncao #comandoLocalFunction
         |  'local' listadenomes ('=' listaexp)? #comandoLocalAtribuicao
         ;
@@ -80,7 +103,12 @@ funcao : 'function' corpodafuncao
 corpodafuncao : '(' (listapar)? ')' bloco 'end'
               ;
 
-listapar : listadenomes (',' '...')? #listaParListaDeNomes
+listapar : listadenomes (',' '...')? 
+            {for(String nome : $listadenomes.nomes)
+              if(!pilhaDeTabelas.existeSimbolo(nome))
+              pilhaDeTabelas.topo().adicionarSimbolo(nome, "parametro");
+            }
+          #listaParListaDeNomes
          | '...' #listaParVarargs
          ;
 

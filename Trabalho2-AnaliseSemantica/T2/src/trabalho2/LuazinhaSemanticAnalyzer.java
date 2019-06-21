@@ -11,7 +11,7 @@ package trabalho2;
  */
 public class LuazinhaSemanticAnalyzer extends LuazinhaBaseVisitor<Void> {
     // Não esqueça de colocar os RAs do seu grupo na variável a seguir    
-    public static String grupo = "<Coloque os RAs do seu grupo aqui>"; 
+    public static String grupo = "<628093,628301,595160>"; 
 
     PilhaDeTabelas pilhaDeTabelas = new PilhaDeTabelas();
 
@@ -19,12 +19,14 @@ public class LuazinhaSemanticAnalyzer extends LuazinhaBaseVisitor<Void> {
     public Void visitPrograma(LuazinhaParser.ProgramaContext ctx) {
         pilhaDeTabelas.empilhar(new TabelaDeSimbolos("global"));
         
+        
+        
         // A chamada a seguir invoca o comportamento padrão,
         // que é o de visitar todos os filhos
         super.visitPrograma(ctx);
         // Também poderia substituir por uma chamada específica a
         // outro visitante, como a seguir:
-        //visitTrecho(ctx.trecho());
+        // visitTrecho(ctx.trecho());
         // Neste caso, é preciso especificar o contexto específico
         // do visitante (trecho)
 
